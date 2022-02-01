@@ -27,7 +27,4 @@ Rails.application.routes.draw do
   post "like", to: "tweets#handle_like"
   get "like", to: "tweets#show_likes"
 
-  get "my_tweets", to: "tweets#my_tweets"
-  get "other_tweets", to: "tweets#other_tweets"
-  get "archived_tweets", to: "tweets#archived_tweets"
 end
