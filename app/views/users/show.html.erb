@@ -2,15 +2,16 @@
     <h1 class="mt-4"><%= @user.username %>'s profile!</h1>
     <h2> Followers: <%= @followers.count %> </h2>
     <% if @user.id != Current.user.id && @user.followers.pluck(:follower_id).include?(Current.user.id) %>
-        <%= button_to "Unfollow", search_path, method: :put, class: "btn btn-outline-secondary" %>
+        <%= button_to "Unfollow", user_path, method: :put, class: "btn btn-outline-secondary" %>
     <% end %>
     <% if @user.id != Current.user.id && !@user.followers.pluck(:follower_id).include?(Current.user.id) %>
-        <%= button_to "Follow", search_path, method: :put, class: "btn btn-primary" %>
+        <%= button_to "Follow", user_path, method: :put, class: "btn btn-primary" %>
     <% end %>
     <ul>
     <% @tweets.each do |tweet| %>
         <li>
-        <%= link_to tweet.title, tweet %>
+            <%= tweet.user.username %><br>
+            <%= link_to tweet.body %>
         </li>
     <% end %>
     </ul>

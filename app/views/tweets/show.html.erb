@@ -1,6 +1,3 @@
-<h1><%= @tweet.title %></h1>
-
-<small> Status: <%= @tweet.status %> </small>
 
 <p><%= @tweet.body %></p>
 
@@ -13,28 +10,3 @@
     </div>
 <% end %>
 
-<h3>Comments</h3>
-<% @tweet.comments.each do |comment| %>
-  <p>
-    <strong>Commenter:</strong>
-    <%= comment.user.email %>
-  </p>
-
-  <p>
-    <strong>Comment:</strong>
-    <%= comment.body %>
-  </p>
-<% end %>
-
-<h4>Add a comment:</h4>
-<%= form_with model: [ @tweet, @tweet.comments.build ] do |form| %>
-
-  <p>
-    <%= form.label :body %><br>
-    <%= form.text_area :body %>
-  </p>
-  <p>
-    <%= form.submit %>
-  </p>
-
-<% end %>

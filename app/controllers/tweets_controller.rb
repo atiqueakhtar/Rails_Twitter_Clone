@@ -1,6 +1,6 @@
 class TweetsController < ApplicationController
     def index
-      @tweets = Tweet.published
+      @tweets = Tweet.all
     end
     
     def show
@@ -13,7 +13,7 @@ class TweetsController < ApplicationController
     end
 
     def create
-      @tweet = Tweet.new(title: params[:tweet][:title], body: params[:tweet][:body], status: params[:tweet][:status], user_id: Current.user.id)
+      @tweet = Tweet.new(body: params[:body], user_id: Current.user.id)
   
       if @tweet.save
         redirect_to root_path, notice: "Tweet created successfully!"
@@ -43,19 +43,19 @@ class TweetsController < ApplicationController
       redirect_to root_path, notice: "Tweet deleted successfully!"
     end
 
-    def my_tweets
-        # @tweets = Tweet.where("email = ? AND (status = ? OR status = ?)", Current.user.email, "public", "private")
-        @tweets = Current.user.tweets.public_private_tweets
+    def handle_like
+      if Tweet.find_by(id: params[:tweet_id]).likes.pluck(:user_id).include?(Current.user.id)
+        Like.find_by(tweet_id: params[:tweet_id], user_id: Current.user.id).destroy
+        redirect_to root_path, notice: "Tweet unliked successfully!"
+      else
+        @like = Like.create(user_id: Current.user.id, tweet_id: params[:tweet_id])
+        redirect_to root_path, notice: "Tweet liked successfully!"
+      end
     end
 
-    def other_tweets
-        # @tweets = Tweet.where("email != ? AND status = ?", Current.user.email, "public")
-        @tweets = Tweet.published.other_users
-    end
-  
     private
       def tweet_params
-        params.require(:tweet).permit(:title, :body, :status)
+        params.require(:tweet).permit(:body)
       end
 end
   

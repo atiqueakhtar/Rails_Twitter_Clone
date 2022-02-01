@@ -1,4 +1,4 @@
-class SearchController < ApplicationController
+class UsersController < ApplicationController
     def create
         if params[:username] == ""
             redirect_to root_path, notice: "Type username to search." 
@@ -9,7 +9,7 @@ class SearchController < ApplicationController
 
     def show
         @user = User.find_by(id: params[:id])
-        @tweets = @user.tweets.published
+        @tweets = @user.tweets.all
         @followers = @user.followers
     end
 
@@ -17,10 +17,10 @@ class SearchController < ApplicationController
         @user_followers = User.find_by(id: params[:id]).followers.pluck(:follower_id)
         if @user_followers.include? Current.user.id
             Follower.find_by(user_id: params[:id], follower_id: Current.user.id).destroy
-            redirect_to search_path(params[:id]), notice: "Unfollowed successfully!"
+            redirect_to user_path(params[:id]), notice: "Unfollowed successfully!"
         else
             Follower.create(user_id: params[:id], follower_id: Current.user.id)
-            redirect_to search_path(params[:id]), notice: "Followed successfully!"
+            redirect_to user_path(params[:id]), notice: "Followed successfully!"
         end
     end
 end

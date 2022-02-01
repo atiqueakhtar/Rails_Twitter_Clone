@@ -1,7 +1,7 @@
 <div class="d-flex flex-column align-items-center justify-content-center">
-    <h1 class="mt-4">Welcome to your Tweets!</h1>
-    <h1>My Tweets</h1>
-
+    <h1 class="mt-4"><%= @user.username %>'s profile!</h1>
+    <h2> Followers: <%= @user.followers.count %> </h2>
+    <%= button_to "Follow", user_path, method: :put, class: "btn btn-outline-secondary" %>
     <ul>
     <% @tweets.each do |tweet| %>
         <li>
@@ -10,5 +10,4 @@
     <% end %>
     </ul>
 
-    <%= link_to "New Tweet", new_tweet_path %>
 </div> 

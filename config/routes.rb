@@ -20,11 +20,11 @@ Rails.application.routes.draw do
   # root "tweets#index"
   root "tweets#index"
 
-  resources :tweets do
-    resources :comments
-  end
+  resources :tweets
 
-  resources :search
+  resources :users
+
+  post "like", to: "tweets#handle_like"
 
   get "my_tweets", to: "tweets#my_tweets"
   get "other_tweets", to: "tweets#other_tweets"

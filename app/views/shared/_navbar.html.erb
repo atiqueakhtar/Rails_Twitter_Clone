@@ -14,16 +14,10 @@
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <% if Current.user %>
           <li class="nav-item">
-            <%= form_with url: search_index_path do |form| %>
+            <%= form_with url: users_path do |form| %>
                 <%= form.text_field :username, style: "display:inline; width:70%;", class: "form-control" %>
                 <%= form.submit "Search", style: "display:inline;", class: "btn btn-secondary"%>
             <% end %> 
-          </li>
-          <li class="nav-item">
-            <%= link_to "My Tweets", my_tweets_path, class: "nav-link" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Other Tweets", other_tweets_path, class: "nav-link" %>
           </li>
           <li class="nav-item">
             <%= link_to "@#{Current.user.username}", edit_password_path, class: "nav-link" %>

@@ -1,14 +1,27 @@
 <div class="d-flex flex-column align-items-center justify-content-center">
-    <h1 class="mt-4">Welcome to scheduled blogs!</h1>
+    <h1 class="mt-4">Welcome to twitter clone!</h1>
     <h1>Tweets</h1>
 
-    <ul>
-    <% @tweets.each do |tweet| %>
-        <li>
-        <%= link_to tweet.title, tweet %>
-        </li>
+    <%= form_with model: @tweet, url: tweets_path do |form| %>
+
+        <div class="mb-3">
+            <%= form.label :body %><br>
+            <%= form.text_area :body, class: "form-control" %>
+        </div>
+        <div class="mb-3 ">
+            <%= form.submit "Create Tweet", class: "btn btn-primary" %>
+        </div>
     <% end %>
+
+    <ul>
+        <% @tweets.each do |tweet| %>
+            <li>
+                <%= tweet.user.username %><br>
+                <%= link_to tweet.body, tweet_path, params: {tweet_id: tweet.id} %>
+                <%= button_to "Like", like_path, params: {tweet_id: tweet.id} %>
+                <%= tweet.likes.count %>
+            </li>
+        <% end %>
     </ul>
 
-    <%= link_to "New Tweet", new_tweet_path %>
 </div> 
