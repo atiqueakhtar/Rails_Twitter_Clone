@@ -1,7 +1,7 @@
 
-<p><%= @tweet.body %></p>
+<h2> <%= @tweet.user.username %> </h2>
 
-<small> Tweet By: <%= @tweet.user.email %> </small>
+<p><%= @tweet.body %></p>
 
 <% if session[:user_id] && @tweet.user.email == Current.user.email %>
     <div>
@@ -9,4 +9,6 @@
         <%= button_to "Delete", tweet_path(@tweet), method: :delete, class: "btn btn-outline-secondary" %>      
     </div>
 <% end %>
+
+<%= link_to "#{@tweet.likes.count} likes", like_path(id: @tweet.id) %>
 

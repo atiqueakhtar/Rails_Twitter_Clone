@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   resources :users
 
   post "like", to: "tweets#handle_like"
+  get "like", to: "tweets#show_likes"
 
   get "my_tweets", to: "tweets#my_tweets"
   get "other_tweets", to: "tweets#other_tweets"

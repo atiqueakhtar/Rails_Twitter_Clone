@@ -43,6 +43,10 @@ class TweetsController < ApplicationController
       redirect_to root_path, notice: "Tweet deleted successfully!"
     end
 
+    def show_likes 
+      @likes = Tweet.find_by(id: params[:id]).likes
+    end
+
     def handle_like
       if Tweet.find_by(id: params[:tweet_id]).likes.pluck(:user_id).include?(Current.user.id)
         Like.find_by(tweet_id: params[:tweet_id], user_id: Current.user.id).destroy

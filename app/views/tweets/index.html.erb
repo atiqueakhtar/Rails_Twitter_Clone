@@ -17,7 +17,7 @@
         <% @tweets.each do |tweet| %>
             <li>
                 <%= tweet.user.username %><br>
-                <%= link_to tweet.body, tweet_path, params: {tweet_id: tweet.id} %>
+                <%= link_to tweet.body, tweet_path(tweet.id) %>
                 <%= button_to "Like", like_path, params: {tweet_id: tweet.id} %>
                 <%= tweet.likes.count %>
             </li>
