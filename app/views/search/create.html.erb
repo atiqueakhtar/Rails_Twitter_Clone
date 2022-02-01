@@ -1,0 +1,12 @@
+<div class="d-flex flex-column align-items-center justify-content-center">
+    <h1 class="mt-4">Search Results:</h1>
+
+    <ul>
+    <% @users.each do |user| %>
+        <li>
+        <%= link_to user.username, search_path(user) %>
+        </li>
+    <% end %>
+    </ul>
+
+</div> 
