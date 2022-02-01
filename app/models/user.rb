@@ -10,8 +10,10 @@
 class User < ApplicationRecord
     has_many :tweets, dependent: :destroy
     has_many :comments, dependent: :destroy
-    has_many :followers, dependent: :destroy
     has_many :likes
+
+    has_many :relations, foreign_key: :follower_id, inverse_of: :follower
+    # has_many :followers, through: :relations, class_name: “User”
     
     has_secure_password
 

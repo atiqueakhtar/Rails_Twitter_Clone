@@ -20,7 +20,7 @@
                 <%= link_to tweet.body, tweet_path(tweet.id) %>
                 <%= button_to "Like", like_path, params: {tweet_id: tweet.id} %>
                 <%= tweet.likes.count %>
-            </li>
+            </li><br>
         <% end %>
     </ul>
 
