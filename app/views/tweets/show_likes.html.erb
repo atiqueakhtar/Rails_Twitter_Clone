@@ -1,7 +1,0 @@
-<ul>
-    <% @likes.each do |like| %>
-        <li>
-            <%= link_to like.user.username, user_path(like.user.id) %><br>
-        </li>
-    <% end %>
-</ul>

@@ -1,6 +1,6 @@
 <div class="d-flex flex-column align-items-center justify-content-center">
     <h1 class="mt-4"><%= @user.username %>'s profile!</h1>
-    <h2> Followers: <%= @followers.count %> </h2>
+    <h2> Followers: <%= link_to @followers.count, followers_user_path(@user.id) %> </h2>
     <% if @user.id != Current.user.id && @user.followers.pluck(:follower_id).include?(Current.user.id) %>
         <%= button_to "Unfollow", user_path, method: :put, class: "btn btn-outline-secondary" %>
     <% end %>

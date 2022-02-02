@@ -20,11 +20,14 @@ Rails.application.routes.draw do
   # root "tweets#index"
   root "tweets#index"
 
-  resources :tweets
+  resources :tweets do
+    resources :likes, only: [:index, :create]
+  end
 
-  resources :users
-
-  post "like", to: "tweets#handle_like"
-  get "like", to: "tweets#show_likes"
+  resources :users do
+    member do
+      get 'followers'
+    end
+  end
 
 end

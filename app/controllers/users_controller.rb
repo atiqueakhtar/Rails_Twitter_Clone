@@ -1,4 +1,8 @@
 class UsersController < ApplicationController
+    def followers
+        @followers = User.find_by(id: params[:id]).followers
+    end
+
     def create
         if params[:username] == ""
             redirect_to root_path, notice: "Type username to search." 
@@ -16,10 +20,10 @@ class UsersController < ApplicationController
     def update
         @user_followers = User.find_by(id: params[:id]).followers.pluck(:follower_id)
         if @user_followers.include? Current.user.id
-            Follower.find_by(user_id: params[:id], follower_id: Current.user.id).destroy
+            Relation.find_by(followed_id: params[:id], follower_id: Current.user.id).destroy
             redirect_to user_path(params[:id]), notice: "Unfollowed successfully!"
         else
-            Follower.create(user_id: params[:id], follower_id: Current.user.id)
+            Relation.create(followed_id: params[:id], follower_id: Current.user.id)
             redirect_to user_path(params[:id]), notice: "Followed successfully!"
         end
     end
