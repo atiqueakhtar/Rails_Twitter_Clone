@@ -1,8 +1,4 @@
 class Relation < ApplicationRecord
-    #  followed_id
-    #  follower_id
-    #   belongs_to :follower, class_name: "User", inverse_of: :relations
-    #   belongs_to :followed, class_name: “User”, source: "user"
-    belongs_to :follower, class_name: "User", inverse_of: :relations
-    belongs_to :followed, class_name: "User"
+    belongs_to :follower, foreign_key: :follower_id, class_name: "User"
+    belongs_to :followee, foreign_key: :followed_id, class_name: "User"
 end

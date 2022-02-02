@@ -1,6 +1,9 @@
 class UsersController < ApplicationController
+
+    before_action :get_user, only: [:followers, :show, :update]
+
     def followers
-        @followers = User.find_by(id: params[:id]).followers
+        @followers = @required_user.followers
     end
 
     def create
@@ -12,19 +15,23 @@ class UsersController < ApplicationController
     end
 
     def show
-        @user = User.find_by(id: params[:id])
+        @user = @required_user
         @tweets = @user.tweets.all
         @followers = @user.followers
     end
 
     def update
-        @user_followers = User.find_by(id: params[:id]).followers.pluck(:follower_id)
-        if @user_followers.include? Current.user.id
-            Relation.find_by(followed_id: params[:id], follower_id: Current.user.id).destroy
+        if User.new.followed?(params[:id])
+            @required_user.followers.delete(Current.user)
             redirect_to user_path(params[:id]), notice: "Unfollowed successfully!"
         else
-            Relation.create(followed_id: params[:id], follower_id: Current.user.id)
+            @required_user.followers << Current.user
             redirect_to user_path(params[:id]), notice: "Followed successfully!"
         end
+    end
+
+    private
+    def get_user
+        @required_user = User.find_by(id: params[:id])
     end
 end

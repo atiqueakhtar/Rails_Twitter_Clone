@@ -6,11 +6,11 @@ class LikesController < ApplicationController
     end
 
     def create
-        if @tweet.likes.pluck(:user_id).include?(Current.user.id)
-            Like.find_by(tweet_id: params[:tweet_id], user_id: Current.user.id).destroy
+        if Like.new.liked?(params[:tweet_id])
+            @tweet.liked_by.delete(Current.user)
             redirect_to root_path, notice: "Tweet unliked successfully!"
         else
-            @like = Like.create(user_id: Current.user.id, tweet_id: params[:tweet_id])
+            @tweet.liked_by << Current.user
             redirect_to root_path, notice: "Tweet liked successfully!"
         end
     end
