@@ -1,0 +1,4 @@
+var list = document.querySelector("#tweet-list")
+list.addEventListener("ajax:success", (event) => {
+    event.target.parentElement.remove()
+})

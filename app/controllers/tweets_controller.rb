@@ -14,11 +14,14 @@ class TweetsController < ApplicationController
 
     def create
       @tweet = Tweet.new(body: params[:body], user_id: Current.user.id)
-  
-      if @tweet.save
-        redirect_to root_path, notice: "Tweet created successfully!"
-      else
-        render :new, status: :unprocessable_entity
+      respond_to do |format|
+        if @tweet.save
+          format.html { redirect_to root_path, notice: "Tweet created successfully!" }
+          format.js { }
+          format.json { head :no_content }
+        else
+          render :new, status: :unprocessable_entity
+        end
       end
     end
   
@@ -39,8 +42,11 @@ class TweetsController < ApplicationController
     def destroy
       @tweet = Tweet.find(params[:id])
       @tweet.destroy
-  
-      redirect_to root_path, notice: "Tweet deleted successfully!"
+      respond_to do |format|
+        format.html { redirect_to root_path, notice: "Tweet deleted successfully!" }
+        format.json { head :no_content }   
+        format.js { render :layout => false }
+      end
     end
 
     private

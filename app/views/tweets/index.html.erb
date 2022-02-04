@@ -2,7 +2,7 @@
     <h1 class="mt-4">Welcome to twitter clone!</h1>
     <h1>Tweets</h1>
 
-    <%= form_with model: @tweet, url: tweets_path do |form| %>
+    <%= form_with model: @tweet, id: "tweet-submit", url: tweets_path, local: false do |form| %>
 
         <div class="mb-3">
             <%= form.label :body %><br>
@@ -13,20 +13,11 @@
         </div>
     <% end %>
 
-    <ul reversed>
+    <ul id="tweet-list">
         <% @tweets.reverse.each do |tweet| %>
             <li>
-                <%= tweet.user.username %><br>
-                <%= link_to tweet.body, tweet_path(tweet.id) %><br>
-                <% if session[:user_id] && tweet.liked_by.pluck(:id).include?(Current.user.id) %>
-                    <%= button_to "Unlike", tweet_likes_path(tweet.id), class: "btn btn-secondary" %>
-                <% end %>
-                <% if session[:user_id] && !tweet.liked_by.pluck(:id).include?(Current.user.id) %>
-                    <%= button_to "Like", tweet_likes_path(tweet.id), class: "btn btn-primary" %>
-                <% end %>
-                
-                <%= tweet.likes.count %>
-            </li><br>
+                <%= render partial: "tweet", locals: { tweet: tweet } %>
+            </li>
         <% end %>
     </ul>
 

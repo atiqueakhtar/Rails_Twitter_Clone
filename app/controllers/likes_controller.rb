@@ -6,12 +6,16 @@ class LikesController < ApplicationController
     end
 
     def create
-        if Like.new.liked?(params[:tweet_id])
-            @tweet.liked_by.delete(Current.user)
-            redirect_to root_path, notice: "Tweet unliked successfully!"
-        else
-            @tweet.liked_by << Current.user
-            redirect_to root_path, notice: "Tweet liked successfully!"
+        respond_to do |format|
+            if Like.new.liked?(params[:tweet_id])
+                @tweet.liked_by.delete(Current.user)
+                format.turbo_stream
+                format.html { redirect_to root_path, notice: "Tweet unliked successfully!" }
+            else
+                @tweet.liked_by << Current.user
+                format.turbo_stream
+                format.html { redirect_to root_path, notice: "Tweet liked successfully!" }
+            end
         end
     end
 

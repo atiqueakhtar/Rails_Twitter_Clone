@@ -1,0 +1,3 @@
+<%= turbo_stream.update dom_id(@tweet) do %>
+    <%= @tweet.liked_by.count %>
+<% end %>
