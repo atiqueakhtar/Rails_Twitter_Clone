@@ -21,7 +21,6 @@ Rails.application.routes.draw do
   root "tweets#index"
 
   resources :tweets do
-    # resources :likes, only: [:index, :create]
     member do
       post 'add_like'
       get 'likes'
