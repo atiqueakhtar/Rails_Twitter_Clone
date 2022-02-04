@@ -2,11 +2,12 @@
     <%= link_to tweet.body, tweet_path(tweet.id) %><br>
 
     
-    <% if session[:user_id] && tweet.liked_by.pluck(:id).include?(Current.user.id) %>
-        <%= button_to "Unlike", tweet_likes_path(tweet.id), class: "btn btn-secondary" %>
-    <% end %>
-    <% if session[:user_id] && !tweet.liked_by.pluck(:id).include?(Current.user.id) %>
-        <%= button_to "Like", tweet_likes_path(tweet.id), class: "btn btn-primary" %>
+    <% if session[:user_id] %>
+        <% if Tweet.new.liked?(tweet.id) %>
+            <%= button_to "Unlike", add_like_tweet_path(tweet.id), class: "btn btn-secondary" %>
+        <% else %>
+            <%= button_to "Like", add_like_tweet_path(tweet.id), class: "btn btn-primary" %>
+        <% end %>
     <% end %>
 
     <%= turbo_frame_tag dom_id(tweet) do %>

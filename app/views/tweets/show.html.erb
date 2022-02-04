@@ -10,5 +10,5 @@
     </div>
 <% end %>
 
-<%= link_to "#{@tweet.likes.count} likes", tweet_likes_path(@tweet.id) %>
+<%= link_to "#{@tweet.likes.count} likes", likes_tweet_path(@tweet.id) %>
 
