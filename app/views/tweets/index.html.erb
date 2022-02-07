@@ -17,6 +17,12 @@
 
         <%= turbo_frame_tag "tweets_list" do %>
             <% @tweets.reverse.each do |tweet| %>
+                <% tweet.retweeted_by.each do |user| %>
+                    <li>
+                        <h4><%= user.username %> retweeted:</h4>
+                        <%= render partial: "tweet", locals: { tweet: tweet } %>
+                    </li><br>
+                <% end %>
                 <li>
                     <%= render partial: "tweet", locals: { tweet: tweet } %>
                 </li><br>
