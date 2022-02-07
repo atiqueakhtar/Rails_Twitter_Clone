@@ -9,20 +9,14 @@
         <% end %>
     <% end %>
     <ul>
-        <% @user.all_retweets.each do |tweet| %>
-            <li>
-                <h4><%= @user.username %> retweeted this</h4>
-                <%= tweet.user.username %><br>
-                <%= link_to tweet.body, tweet_path(tweet.id) %>
-            </li><br>
-        <% end %>
-    </ul>
-    <ul>
-        <% @tweets.each do |tweet| %>
-            <li>
-                <%= tweet.user.username %><br>
-                <%= link_to tweet.body, tweet_path(tweet.id) %>
-            </li><br>
+        <% @tweets.reverse.each do |tweet| %>
+            <% if tweet.parent_id %>
+                <p><%= tweet.user.username %> retweeted:</p>
+                <%= render partial: "tweets/tweet", locals: { tweet: Tweet.find_by(id: tweet.parent_id) } %>
+            <% else %>
+                <%= render partial: "tweets/tweet", locals: { tweet: tweet } %>
+            <% end %>
+            <br>
         <% end %>
     </ul>
 

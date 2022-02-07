@@ -5,7 +5,7 @@
         <div class="row align-items-end">
             <div class="col">
                 <% if session[:user_id] %>
-                    <% if tweet.retweeted_by?(Current.user.id) %>
+                    <% if tweet.liked_by?(Current.user.id) %>
                         <%= button_to "Unlike", add_like_tweet_path(tweet.id), class: "btn btn-secondary", form_class: "d-inline" %>
                     <% else %>
                         <%= button_to "Like", add_like_tweet_path(tweet.id), class: "btn btn-primary", form_class: "d-inline" %>
