@@ -11,6 +11,9 @@ class User < ApplicationRecord
     has_many :tweets, dependent: :destroy
     has_many :likes
 
+    has_many :retweets, dependent: :destroy
+    has_many :all_retweets, through: :retweets, class_name: "Tweet", source: "tweet"
+
     # The user has many followers:
     has_many :follower_users, foreign_key: :followed_id, class_name: "Relation"
     has_many :followers, through: :follower_users, source: :follower

@@ -15,11 +15,11 @@
 
     <ul id="tweet-list">
 
-        <%= turbo_frame_tag "hello_tweet" do %>
+        <%= turbo_frame_tag "tweets_list" do %>
             <% @tweets.reverse.each do |tweet| %>
                 <li>
                     <%= render partial: "tweet", locals: { tweet: tweet } %>
-                </li>
+                </li><br>
             <% end %>
         <% end %>
     </ul>

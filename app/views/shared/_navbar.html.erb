@@ -20,7 +20,7 @@
             <% end %> 
           </li>
           <li class="nav-item">
-            <%= link_to "@#{Current.user.username}", edit_password_path, class: "nav-link" %>
+            <%= link_to "@#{Current.user.username}", user_path(Current.user.id), class: "nav-link" %>
           </li>
           <li class="nav-item">
             <%= button_to "Logout", logout_path, method: :delete, class: "btn btn-outline-secondary" %>

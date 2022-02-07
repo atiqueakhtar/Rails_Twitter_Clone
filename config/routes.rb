@@ -24,6 +24,8 @@ Rails.application.routes.draw do
     member do
       post 'add_like'
       get 'likes'
+      post 'update_retweet'
+      get 'retweets'
     end
   end
 

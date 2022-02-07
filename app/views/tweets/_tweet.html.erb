@@ -1,5 +1,5 @@
     <%= tweet.user.username %><br>
-    <%= link_to tweet.body, tweet_path(tweet.id) %><br>
+    <%= link_to tweet.body, tweet_path(tweet.id), data: { turbo: "false" } %><br>
 
     <% if session[:user_id] %>
         <% if tweet.liked_by?(Current.user.id) %>
@@ -13,3 +13,12 @@
         <%= tweet.likes.count %>
     <% end %>
     <%= button_to "Delete", tweet_path(tweet), method: :delete, class: "delete-item btn btn-outline-secondary", remote: true %>      
+
+    <% if session[:user_id] %>
+        <% if tweet.retweeted_by?(Current.user.id) %>
+            <%= button_to "Retweet", update_retweet_tweet_path(tweet.id), class: "btn btn-secondary", data: { turbo: "false" } %>
+        <% else %>
+            <%= button_to "Retweet", update_retweet_tweet_path(tweet.id), class: "btn btn-primary", data: { turbo: "false" } %>
+        <% end %>
+        <%= tweet.retweeted_by.count %>
+    <% end %>

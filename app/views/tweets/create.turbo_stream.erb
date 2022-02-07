@@ -1,5 +1,5 @@
-<%= turbo_stream.prepend "hello_tweet" do %>
+<%= turbo_stream.prepend "tweets_list" do %>
     <li>
         <%= render partial: "tweet", locals: { tweet: @tweet } %>
-    </li>
+    </li><br>
 <% end %>

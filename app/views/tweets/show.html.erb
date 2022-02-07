@@ -3,12 +3,19 @@
 
 <p><%= @tweet.body %></p>
 
+<% if @tweet.retweeted_by?(Current.user.id) %>
+    <%= button_to "Retweet", update_retweet_tweet_path(@tweet.id), class: "btn btn-secondary", data: { turbo: "false" } %>
+<% else %>
+    <%= button_to "Retweet", update_retweet_tweet_path(@tweet.id), class: "btn btn-primary", data: { turbo: "false" } %>
+<% end %>
+
 <% if session[:user_id] && @tweet.user.email == Current.user.email %>
     <div>
-        <%= link_to "Edit", edit_tweet_path(@tweet), class: "btn btn-outline-secondary mb-3" %> 
-        <%= button_to "Delete", tweet_path(@tweet), method: :delete, class: "btn btn-outline-secondary" %>      
+    <%= button_to "Delete", tweet_path(@tweet), method: :delete, class: "btn btn-outline-secondary" %>      
     </div>
 <% end %>
 
+<%= link_to "#{@tweet.retweeted_by.count} retweets", retweets_tweet_path(@tweet.id) %>
 <%= link_to "#{@tweet.likes.count} likes", likes_tweet_path(@tweet.id) %>
+
 

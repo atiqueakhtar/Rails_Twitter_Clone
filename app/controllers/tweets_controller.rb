@@ -1,6 +1,6 @@
 class TweetsController < ApplicationController
 
-    before_action :get_tweet, only: [:likes, :add_like]
+    before_action :get_tweet, only: [:likes, :add_like, :retweets, :update_retweet]
 
     def index
       @tweets = Tweet.all
@@ -68,10 +68,24 @@ class TweetsController < ApplicationController
             end
         end
     end
+
+    def retweets 
+      @users = @tweet.retweeted_by
+    end
+
+    def update_retweet
+        if @tweet.retweeted_by?(Current.user.id)
+          @tweet.retweeted_by.delete(Current.user)
+          redirect_to root_path, notice: "Retweet removed successfully!"
+        else
+          @tweet.retweeted_by << Current.user
+          redirect_to root_path, notice: "Retweeted successfully!"
+        end
+    end
     
     private
       def tweet_params
-        params.require(:tweet).permit(:body)
+        params.permit(:body)
       end
 
       def get_tweet

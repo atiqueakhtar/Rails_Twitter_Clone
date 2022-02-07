@@ -9,12 +9,21 @@
         <% end %>
     <% end %>
     <ul>
-    <% @tweets.each do |tweet| %>
-        <li>
-            <%= tweet.user.username %><br>
-            <%= link_to tweet.body %>
-        </li><br>
-    <% end %>
+        <% @user.all_retweets.each do |tweet| %>
+            <li>
+                <h4><%= @user.username %> retweeted this</h4>
+                <%= tweet.user.username %><br>
+                <%= link_to tweet.body, tweet_path(tweet.id) %>
+            </li><br>
+        <% end %>
+    </ul>
+    <ul>
+        <% @tweets.each do |tweet| %>
+            <li>
+                <%= tweet.user.username %><br>
+                <%= link_to tweet.body, tweet_path(tweet.id) %>
+            </li><br>
+        <% end %>
     </ul>
 
 </div> 
