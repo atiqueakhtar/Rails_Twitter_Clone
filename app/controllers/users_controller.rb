@@ -21,7 +21,7 @@ class UsersController < ApplicationController
     end
 
     def update
-        if User.new.followed?(params[:id])
+        if Current.user.followees?(params[:id])
             @required_user.followers.delete(Current.user)
             redirect_to user_path(params[:id]), notice: "Unfollowed successfully!"
         else

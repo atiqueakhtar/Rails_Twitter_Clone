@@ -2,7 +2,7 @@
     <%= link_to tweet.body, tweet_path(tweet.id) %><br>
 
     <% if session[:user_id] %>
-        <% if Tweet.new.liked?(tweet.id) %>
+        <% if tweet.liked_by?(Current.user.id) %>
             <%= button_to "Unlike", add_like_tweet_path(tweet.id), class: "btn btn-secondary" %>
         <% else %>
             <%= button_to "Like", add_like_tweet_path(tweet.id), class: "btn btn-primary" %>

@@ -25,6 +25,10 @@ class User < ApplicationRecord
     validates :email, presence: true, format: { with: /\A[^@\s]+@[^@\s]+\z/, message: "must be a valid email address." }
 
     def followed?(user_id)
-        User.find_by(id: user_id).followers.pluck(:id).include?(Current.user.id)
+        self.followers.pluck(:id).include?(user_id)
+    end
+
+    def followee?(user_id)
+        self.followees.pluck(:id).include?(user_id)
     end
 end

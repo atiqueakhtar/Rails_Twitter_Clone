@@ -1,4 +1,7 @@
 class TweetsController < ApplicationController
+
+    before_action :get_tweet, only: [:likes, :add_like]
+
     def index
       @tweets = Tweet.all
     end
@@ -48,15 +51,13 @@ class TweetsController < ApplicationController
       end
     end
 
-    before_action :get_tweet, only: [:likes, :add_like]
-
     def likes 
         @users = @tweet.liked_by
     end
 
     def add_like
         respond_to do |format|
-            if Tweet.new.liked?(params[:id])
+            if @tweet.liked_by?(Current.user.id)
                 @tweet.liked_by.delete(Current.user)
                 format.turbo_stream
                 format.html { redirect_to root_path, notice: "Tweet unliked successfully!" }
