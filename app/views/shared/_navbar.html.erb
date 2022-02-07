@@ -13,7 +13,7 @@
 
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <% if Current.user %>
-          <li class="nav-item">
+          <li class="nav-item", data-turbo="false">
             <%= form_with url: users_path do |form| %>
                 <%= form.text_field :username, style: "display:inline; width:70%;", class: "form-control" %>
                 <%= form.submit "Search", style: "display:inline;", class: "btn btn-secondary"%>

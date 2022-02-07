@@ -24,7 +24,7 @@ class User < ApplicationRecord
     validates :username, presence: true
     validates :email, presence: true, format: { with: /\A[^@\s]+@[^@\s]+\z/, message: "must be a valid email address." }
 
-    def followed?(user_id)
+    def followed_by?(user_id)
         self.followers.pluck(:id).include?(user_id)
     end
 
