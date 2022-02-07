@@ -2,7 +2,7 @@
     <h1 class="mt-4">Welcome to twitter clone!</h1>
     <h1>Tweets</h1>
 
-    <%= form_with model: @tweet, id: "tweet-submit", url: tweets_path, local: false do |form| %>
+    <%= form_with model: @tweet, id: "tweet-submit", url: tweets_path do |form| %>
 
         <div class="mb-3">
             <%= form.label :body %><br>
@@ -14,10 +14,13 @@
     <% end %>
 
     <ul id="tweet-list">
-        <% @tweets.reverse.each do |tweet| %>
-            <li>
-                <%= render partial: "tweet", locals: { tweet: tweet } %>
-            </li>
+
+        <%= turbo_frame_tag "hello_tweet" do %>
+            <% @tweets.reverse.each do |tweet| %>
+                <li>
+                    <%= render partial: "tweet", locals: { tweet: tweet } %>
+                </li>
+            <% end %>
         <% end %>
     </ul>
 

@@ -3,6 +3,4 @@
     node.innerHTML = "<%= escape_javascript render(partial: 'tweet', locals: { tweet: @tweet }) %>"
     var list = document.querySelector("#tweet-list")
 
-    console.log(list)
     list.insertBefore(node, list.childNodes[0])
-    

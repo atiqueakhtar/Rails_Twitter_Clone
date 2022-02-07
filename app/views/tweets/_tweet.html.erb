@@ -1,7 +1,6 @@
     <%= tweet.user.username %><br>
     <%= link_to tweet.body, tweet_path(tweet.id) %><br>
 
-    
     <% if session[:user_id] %>
         <% if Tweet.new.liked?(tweet.id) %>
             <%= button_to "Unlike", add_like_tweet_path(tweet.id), class: "btn btn-secondary" %>
@@ -10,7 +9,7 @@
         <% end %>
     <% end %>
 
-    <%= turbo_frame_tag dom_id(tweet) do %>
+    <%= turbo_frame_tag "tweet_#{tweet.id}_like_count" do %>
         <%= tweet.likes.count %>
     <% end %>
     <%= button_to "Delete", tweet_path(tweet), method: :delete, class: "delete-item btn btn-outline-secondary", remote: true %>      
