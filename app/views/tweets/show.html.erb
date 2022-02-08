@@ -1,6 +1,6 @@
 <%= render partial: "tweets/tweet", locals: { tweet: @tweet } %>
 
-<%= link_to "#{@tweet.retweeted_by.count} retweets", retweets_tweet_path(@tweet.id) %>
+<%= link_to "#{@tweet.retweets.count} retweets", retweets_tweet_path(@tweet.id) %>
 <%= link_to "#{@tweet.likes.count} likes", likes_tweet_path(@tweet.id) %>
 
 
@@ -10,7 +10,7 @@
 <% end %>
 
 <h4>Add a reply:</h4>
-<%= form_with url: tweet_replies_path(@tweet.id) do |form| %>
+<%= form_with url: add_reply_tweet_path(@tweet.id) do |form| %>
 
   <p>
     <%= form.label :body %><br>

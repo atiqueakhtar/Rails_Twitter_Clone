@@ -26,8 +26,8 @@ Rails.application.routes.draw do
       get 'likes'
       post 'update_retweet'
       get 'retweets'
+      post 'add_reply'
     end
-    resources :replies, only: [:create, :destroy]
   end
 
   resources :users do

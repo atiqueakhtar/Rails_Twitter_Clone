@@ -1,12 +1,12 @@
 <% if tweet.tweet_type == "retweet" %>
     <b><%= tweet.user.username %> retweeted</b>
-    <% tweet = Tweet.find(tweet.parent_id) %>
+    <% tweet = Tweet.find(tweet.parent_tweet_id) %>
 <% end %>
 <div class="card">
     <h5 class="card-header">
         <%= tweet.user.username %>
         <% if tweet.tweet_type == "reply" %>
-            <b>Replying to <%= link_to "tweet", tweet_path(tweet.parent_id), data: { turbo: "false" } %></b>
+            <b>Replying to <%= link_to "tweet", tweet_path(tweet.parent_tweet_id), data: { turbo: "false" } %></b>
         <% end %>
     </h5>
     <div class="card-body">
@@ -25,7 +25,8 @@
                 <% end %>
             </div>
             <div class="col">
-                <%= button_to "Reply", tweet_path(tweet.id), method: :get, class: "btn btn-outline-secondary", data: { turbo: "false" } %>
+                <%= button_to "Reply", tweet_path(tweet.id), method: :get, class: "btn btn-outline-secondary", data: { turbo: "false" }, form_class: "d-inline" %>
+                <%= tweet.replies.count %>
             </div>
             <div class="col">
                 <% if session[:user_id] %>
@@ -35,7 +36,7 @@
                         <%= button_to "Retweet", update_retweet_tweet_path(tweet.id), class: "btn btn-primary", data: { turbo: "false" }, form_class: "d-inline" %>
                     <% end %>
                 <% end %>
-                <%= tweet.retweeted_by.count %>
+                <%= tweet.retweets.count %>
             </div>
             <div class="col">
                 <%= button_to "Delete", tweet_path(tweet), method: :delete, class: "delete-item btn btn-outline-secondary", remote: true %>

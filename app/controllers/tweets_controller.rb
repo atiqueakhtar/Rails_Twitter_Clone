@@ -1,6 +1,6 @@
 class TweetsController < ApplicationController
 
-    before_action :get_tweet, only: [:likes, :add_like, :retweets, :update_retweet, :show]
+    before_action :get_tweet, only: [:likes, :add_like, :retweets, :update_retweet, :show, :add_reply]
 
     def index
       @tweets = Tweet.all
@@ -76,11 +76,20 @@ class TweetsController < ApplicationController
           Tweet.get_retweet(Current.user.id).destroy
           redirect_to root_path, notice: "Retweet removed successfully!"
         else
-          Tweet.create(user_id: Current.user.id, parent_id: @tweet.id, tweet_type: "retweet")
+          Tweet.create(user_id: Current.user.id, parent_tweet_id: @tweet.id, tweet_type: "retweet")
           redirect_to root_path, notice: "Retweeted successfully!"
         end
     end
     
+    def add_reply
+        @reply = Tweet.new(body: tweet_params[:body], user_id: Current.user.id, parent_tweet_id: @tweet.id, tweet_type: "reply")
+        if @reply.save
+          redirect_to tweet_path(@tweet.id), notice: "Reply added successfully!"
+        else
+          render :new, status: :unprocessable_entity
+        end
+    end
+
     private
       def tweet_params
         params.permit(:body)

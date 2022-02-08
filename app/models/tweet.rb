@@ -3,11 +3,11 @@ class Tweet < ApplicationRecord
     has_many :likes, dependent: :destroy
     has_many :liked_by, through: :likes, class_name: "User", source: "user"
 
-    has_many :retweets, class_name: "Tweet", foreign_key: "parent_id", dependent: :destroy
-    has_many :retweeted_by, through: :retweets, class_name: "User", source: :user
-    # belongs_to :parent, class_name: "Tweet", foreign_key: "parent_id"
+    has_many :child_tweets, class_name: "Tweet", foreign_key: "parent_tweet_id", dependent: :destroy
+    has_many :retweeted_by, through: :child_tweets, class_name: "User", source: :user
+    belongs_to :parent_tweet, class_name: "Tweet", foreign_key: "parent_tweet_id", optional: true
 
-    scope :replies, ->(parent_id) { where(parent_id: parent_id).where(tweet_type: "reply") }
+    scope :replies, ->(parent_tweet_id) { where(parent_tweet_id: parent_tweet_id).where(tweet_type: "reply") }
     scope :get_retweet, ->(current_user_id) { find_by(user_id: current_user_id, tweet_type: "retweet") }
 
     def liked_by?(user_id)
@@ -17,4 +17,13 @@ class Tweet < ApplicationRecord
     def retweeted_by?(user_id)
         self.retweeted_by.pluck(:id).include?(user_id)
     end
+
+    def retweets
+        self.child_tweets.where(tweet_type: "retweet")
+    end
+
+    def replies
+        self.child_tweets.where(tweet_type: "reply")
+    end
+
 end
