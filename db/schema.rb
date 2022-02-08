@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_07_115924) do
+ActiveRecord::Schema.define(version: 2022_02_08_042234) do
 
   create_table "likes", force: :cascade do |t|
     t.integer "tweet_id", null: false
@@ -49,5 +49,6 @@ ActiveRecord::Schema.define(version: 2022_02_07_115924) do
   add_foreign_key "likes", "users"
   add_foreign_key "relations", "users", column: "followed_id"
   add_foreign_key "relations", "users", column: "follower_id"
+  add_foreign_key "tweets", "tweets", column: "parent_id"
   add_foreign_key "tweets", "users"
 end
