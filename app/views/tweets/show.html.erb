@@ -1,21 +1,24 @@
-
-<h2> <%= @tweet.user.username %> </h2>
-
-<p><%= @tweet.body %></p>
-
-<% if @tweet.retweeted_by?(Current.user.id) %>
-    <%= button_to "Retweet", update_retweet_tweet_path(@tweet.id), class: "btn btn-secondary", data: { turbo: "false" } %>
-<% else %>
-    <%= button_to "Retweet", update_retweet_tweet_path(@tweet.id), class: "btn btn-primary", data: { turbo: "false" } %>
-<% end %>
-
-<% if session[:user_id] && @tweet.user.email == Current.user.email %>
-    <div>
-    <%= button_to "Delete", tweet_path(@tweet), method: :delete, class: "btn btn-outline-secondary" %>      
-    </div>
-<% end %>
+<%= render partial: "tweets/tweet", locals: { tweet: @tweet } %>
 
 <%= link_to "#{@tweet.retweeted_by.count} retweets", retweets_tweet_path(@tweet.id) %>
 <%= link_to "#{@tweet.likes.count} likes", likes_tweet_path(@tweet.id) %>
 
+
+<h3>Replies</h3>
+<% @replies.each do |reply| %>
+    <%= render partial: "tweets/tweet", locals: { tweet: reply } %><br>
+<% end %>
+
+<h4>Add a reply:</h4>
+<%= form_with url: tweet_replies_path(@tweet.id) do |form| %>
+
+  <p>
+    <%= form.label :body %><br>
+    <%= form.text_area :body %>
+  </p>
+  <p>
+    <%= form.submit "Reply", class: "btn btn-primary" %>
+  </p>
+
+<% end %>
 

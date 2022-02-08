@@ -17,12 +17,7 @@
 
         <%= turbo_frame_tag "tweets_list" do %>
             <% @tweets.reverse.each do |tweet| %>
-                    <% if tweet.parent_id %>
-                        <b><%= tweet.user.username %> retweeted:</b>
-                        <%= render partial: "tweet", locals: { tweet: Tweet.find_by(id: tweet.parent_id) } %>
-                    <% else %>
-                        <%= render partial: "tweet", locals: { tweet: tweet } %>
-                    <% end %>
+                    <%= render partial: "tweet", locals: { tweet: tweet } %>
                     <br>
             <% end %>
         <% end %>

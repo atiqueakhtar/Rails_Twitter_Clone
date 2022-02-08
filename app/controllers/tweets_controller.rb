@@ -1,13 +1,14 @@
 class TweetsController < ApplicationController
 
-    before_action :get_tweet, only: [:likes, :add_like, :retweets, :update_retweet]
+    before_action :get_tweet, only: [:likes, :add_like, :retweets, :update_retweet, :show]
 
     def index
       @tweets = Tweet.all
     end
     
     def show
-      @tweet = Tweet.find(params[:id])
+      @tweet = Tweet.find(@tweet.id)
+      @replies = Tweet.replies(@tweet.id)
     end
 
     def new
@@ -16,15 +17,12 @@ class TweetsController < ApplicationController
     end
 
     def create
-      @tweet = Tweet.new(body: params[:body], user_id: Current.user.id)
-      respond_to do |format|
+      @tweet = Tweet.new(body: params[:body], user_id: Current.user.id, tweet_type: "tweet")
         if @tweet.save
-          format.turbo_stream
-          format.html { redirect_to root_path, notice: "Tweet created successfully!" }
+          redirect_to root_path, notice: "Tweet created successfully!"
         else
           render :new, status: :unprocessable_entity
         end
-      end
     end
   
     def edit
@@ -75,10 +73,10 @@ class TweetsController < ApplicationController
 
     def update_retweet
         if @tweet.retweeted_by?(Current.user.id)
-          @tweet.retweeted_by.delete(Current.user)
+          Tweet.get_retweet(Current.user.id).destroy
           redirect_to root_path, notice: "Retweet removed successfully!"
         else
-          @tweet.retweeted_by << Current.user
+          Tweet.create(user_id: Current.user.id, parent_id: @tweet.id, tweet_type: "retweet")
           redirect_to root_path, notice: "Retweeted successfully!"
         end
     end
@@ -90,6 +88,6 @@ class TweetsController < ApplicationController
 
       def get_tweet
         @tweet = Tweet.find_by(id: params[:id])
-    end
+      end
 end
   
