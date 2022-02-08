@@ -7,7 +7,6 @@ class Tweet < ApplicationRecord
     has_many :retweeted_by, through: :child_tweets, class_name: "User", source: :user
     belongs_to :parent_tweet, class_name: "Tweet", foreign_key: "parent_tweet_id", optional: true
 
-    scope :replies, ->(parent_tweet_id) { where(parent_tweet_id: parent_tweet_id).where(tweet_type: "reply") }
     scope :get_retweet, ->(current_user_id) { find_by(user_id: current_user_id, tweet_type: "retweet") }
 
     def liked_by?(user_id)
@@ -15,7 +14,7 @@ class Tweet < ApplicationRecord
     end
 
     def retweeted_by?(user_id)
-        self.retweeted_by.pluck(:id).include?(user_id)
+        self.child_tweets.where(tweet_type: "retweet").pluck(:user_id).include?(user_id)
     end
 
     def retweets

@@ -1,7 +1,7 @@
 <ul>
-    <% @users.each do |user| %>
+    <% @tweets.each do |tweet| %>
         <li>
-            <%= link_to user.username, user_path(user.id) %><br>
+            <%= link_to tweet.user.username, user_path(tweet.user.id) %><br>
         </li>
     <% end %>
 </ul>

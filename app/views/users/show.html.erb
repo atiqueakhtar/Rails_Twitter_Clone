@@ -10,12 +10,7 @@
     <% end %>
     <ul>
         <% @tweets.reverse.each do |tweet| %>
-            <% if tweet.parent_tweet_id %>
-                <b><%= tweet.user.username %> retweeted:</b>
-                <%= render partial: "tweets/tweet", locals: { tweet: Tweet.find(tweet.parent_tweet_id) } %>
-            <% else %>
-                <%= render partial: "tweets/tweet", locals: { tweet: tweet } %>
-            <% end %>
+            <%= render partial: "tweets/tweet", locals: { tweet: tweet } %>
             <br>
         <% end %>
     </ul>

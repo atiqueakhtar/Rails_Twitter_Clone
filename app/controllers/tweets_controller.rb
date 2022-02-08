@@ -8,7 +8,7 @@ class TweetsController < ApplicationController
     
     def show
       @tweet = Tweet.find(@tweet.id)
-      @replies = Tweet.replies(@tweet.id)
+      @replies = @tweet.replies
     end
 
     def new
@@ -68,7 +68,7 @@ class TweetsController < ApplicationController
     end
 
     def retweets 
-      @users = @tweet.retweeted_by
+      @tweets = @tweet.retweets
     end
 
     def update_retweet
