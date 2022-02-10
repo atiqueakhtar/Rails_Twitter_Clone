@@ -18,11 +18,11 @@ class TweetsController < ApplicationController
 
     def create
       @tweet = Tweet.new(body: params[:body], user_id: Current.user.id, tweet_type: "tweet")
-        if @tweet.save
-          redirect_to root_path, notice: "Tweet created successfully!"
-        else
-          render :new, status: :unprocessable_entity
-        end
+      if params[:body] != "" && @tweet.save
+        redirect_to root_path, notice: "Tweet created successfully!"
+      else
+        redirect_to root_path, alert: "Tweet body can't be empty"
+      end
     end
   
     def edit

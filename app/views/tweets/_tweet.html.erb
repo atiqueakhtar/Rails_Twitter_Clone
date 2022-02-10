@@ -38,9 +38,11 @@
                 <% end %>
                 <%= tweet.retweets.count %>
             </div>
-            <div class="col">
-                <%= button_to "Delete", tweet_path(tweet), method: :delete, class: "delete-item btn btn-outline-secondary", remote: true %>
-            </div>
+            <% if session[:user_id] && tweet.user_id == Current.user.id %>
+                <div class="col">
+                    <%= button_to "Delete", tweet_path(tweet), method: :delete, class: "delete-item btn btn-outline-secondary", remote: true %>
+                </div>
+            <% end %>
         </div>
     </div>
 </div>
