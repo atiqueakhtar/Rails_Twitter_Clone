@@ -1,7 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe "TweetsControllers", type: :request do
+RSpec.describe TweetsController, type: :controller do
   describe "GET /index" do
-    pending "add some examples (or delete) #{__FILE__}"
+    let!(:tweet) { create(:tweet) }
+
+    it 'assigns all tweets as @tweets' do
+      get :index
+      expect(response.status).to eq(200)
+      debugger
+      expect(:tweets).should eq([tweet])
+    end
   end
 end
