@@ -7,7 +7,7 @@ RSpec.describe TweetsController, type: :controller do
     it 'assigns all tweets as @tweets' do
       get :index
       expect(response.status).to eq(200)
-      debugger
+      # debugger
       expect(:tweets).should eq([tweet])
     end
   end

@@ -18,4 +18,27 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#followed_by?' do
+    it 'find if a user is a follower' do
+      relation = create :relation
+
+      follower = relation.follower
+      followee = relation.followee
+
+      expect(followee.followed_by?(follower.id)).to be true
+      expect(follower.followed_by?(followee.id)).to be false
+    end
+  end
+
+  describe '#followee?' do
+    it 'find if a user is a followee' do
+      relation = create :relation
+
+      follower = relation.follower
+      followee = relation.followee
+
+      expect(follower.followee?(followee.id)).to be true
+      expect(followee.followee?(follower.id)).to be false
+    end
+  end
 end

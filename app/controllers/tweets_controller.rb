@@ -3,7 +3,7 @@ class TweetsController < ApplicationController
     before_action :get_tweet, only: [:likes, :add_like, :retweets, :update_retweet, :show, :add_reply]
 
     def index
-      debugger
+      # debugger
       @tweets = Tweet.all
     end
     

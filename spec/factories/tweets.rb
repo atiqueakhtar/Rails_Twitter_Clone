@@ -7,7 +7,7 @@ FactoryBot.define do
     end
 
     factory :parent_tweet, class: Tweet do
-        body { "dummy tweet body" }
+        body { "dummy parent tweet body" }
         parent_tweet_id { nil }
         tweet_type { "tweet" }
         user

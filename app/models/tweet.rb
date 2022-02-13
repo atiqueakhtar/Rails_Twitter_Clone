@@ -14,7 +14,7 @@ class Tweet < ApplicationRecord
     end
 
     def retweeted_by?(user_id)
-        self.child_tweets.where(tweet_type: "retweet").pluck(:user_id).include?(user_id)
+        retweets.pluck(:user_id).include?(user_id)
     end
 
     def retweets
