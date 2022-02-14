@@ -19,7 +19,7 @@ RSpec.describe User, type: :model do
   end
 
   describe '#followed_by?' do
-    it 'find if a user is a follower' do
+    it 'finds if a user is a follower' do
       relation = create :relation
 
       follower = relation.follower
@@ -31,7 +31,7 @@ RSpec.describe User, type: :model do
   end
 
   describe '#followee?' do
-    it 'find if a user is a followee' do
+    it 'finds if a user is a followee' do
       relation = create :relation
 
       follower = relation.follower
