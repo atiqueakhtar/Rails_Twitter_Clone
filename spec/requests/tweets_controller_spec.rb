@@ -24,13 +24,13 @@ RSpec.describe TweetsController, type: :controller do
     it 'ensures correct tweets are shown when user logged in' do
       Current.user = create :user
       session[:user_id] = Current.user.id
-      followee1 = create :user
-      create :relation, follower: Current.user, followee: followee1
-      tweet1 = create :tweet, user: followee1
+      followee = create :user
+      create :relation, follower: Current.user, followee: followee
+      tweet = create :tweet, user: followee
 
       get :index
 
-      expect(assigns(:tweets)).to match_array(Tweet.find(tweet1.id))
+      expect(assigns(:tweets)).to match_array(Tweet.find(tweet.id))
     end
   end
 
@@ -161,6 +161,55 @@ RSpec.describe TweetsController, type: :controller do
       get :retweets, params: {id: tweet.id}
 
       expect(assigns(:tweets)).to match_array(retweets)
+    end
+  end
+
+  describe "GET /retweets" do
+    it 'renders retweets page' do
+      tweet = create :tweet_with_retweets
+      retweets = tweet.retweets
+
+      get :retweets, params: {id: tweet.id}
+
+      expect(response.status).to eq(200)
+      expect(response).to render_template("retweets")
+    end
+
+    it 'ensures who have retweeted the tweet are only shown' do
+      tweet = create :tweet_with_retweets
+      retweets = tweet.retweets
+
+      get :retweets, params: {id: tweet.id}
+
+      expect(assigns(:tweets)).to match_array(retweets)
+    end
+  end
+
+  describe "POST /update_retweet" do
+    it 'retweets if not retweeted already' do
+      tweet = create :parent_tweet
+      Current.user = create :user
+
+      expect{ post :update_retweet, params: {id: tweet.id} }.to change{ tweet.retweets.count }.by(1)
+    end
+
+    it 'removes retweet if already retweeted' do
+      tweet = create :tweet, :retweet
+      parent_tweet = tweet.parent_tweet
+      Current.user = tweet.user
+
+      expect{ post :update_retweet, params: {id: parent_tweet.id} }.to change { parent_tweet.retweets.count }.by(-1)
+    end
+  end
+
+  describe "POST /add_reply" do
+    it 'retweets if not retweeted already' do
+      tweet = create :tweet_with_replies
+      reply = create :tweet
+
+      post :add_reply, params: {id: tweet, body: reply.body}
+
+      expect{ post :add_reply, params: {id: tweet, body: reply.body} }.to change{ tweet.replies.count }.by(1)
     end
   end
 end
