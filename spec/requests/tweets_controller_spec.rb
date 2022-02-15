@@ -19,7 +19,7 @@ RSpec.describe TweetsController, type: :controller do
       tweets.concat(tweet1.replies)
 
       get :index
-      
+
       expect(assigns(:tweets)).to match_array(tweets)
     end
 
@@ -159,6 +159,29 @@ RSpec.describe TweetsController, type: :controller do
       post :add_like, params: params
 
       expect(tweet.likes).to eq([])
+    end
+  end
+
+  describe "GET /retweets" do
+    it 'renders retweets page' do
+      tweet = create :tweet_with_retweets
+      retweets = tweet.retweets
+
+      params = {id: tweet.id}
+      get :retweets, params: params
+
+      expect(response.status).to eq(200)
+      expect(response).to render_template("retweets")
+    end
+
+    it 'ensures who have retweeted the tweet are only shown' do
+      tweet = create :tweet_with_retweets
+      retweets = tweet.retweets
+
+      params = {id: tweet.id}
+      get :retweets, params: params
+
+      expect(assigns(:tweets)).to match_array(retweets)
     end
   end
 end
