@@ -3,18 +3,16 @@ class TweetsController < ApplicationController
     before_action :get_tweet, only: [:likes, :add_like, :retweets, :update_retweet, :show, :add_reply]
 
     def index
-      # debugger
-      @tweets = Tweet.all
+      if session[:user_id]
+        @tweets = Tweet.all.select { |tweet| Current.user.followees.pluck(:id).include?(tweet.user_id) || (tweet.user_id == Current.user.id) }
+      else
+        @tweets = Tweet.all
+      end
     end
-    
+  
     def show
       @tweet = Tweet.find(@tweet.id)
       @replies = @tweet.replies
-    end
-
-    def new
-      require_user_logged_in! unless session[:user_id]
-      @tweet = Tweet.new
     end
 
     def create
@@ -23,20 +21,6 @@ class TweetsController < ApplicationController
         redirect_to root_path, notice: "Tweet created successfully!"
       else
         redirect_to root_path, alert: "Tweet body can't be empty"
-      end
-    end
-  
-    def edit
-      @tweet = Tweet.find(params[:id])
-    end
-  
-    def update
-      @tweet = Tweet.find(params[:id])
-  
-      if @tweet.update(tweet_params)
-        redirect_to @tweet, notice: "Status updated successfully!"
-      else
-        render :edit, status: :unprocessable_entity
       end
     end
   
@@ -74,7 +58,7 @@ class TweetsController < ApplicationController
 
     def update_retweet
         if @tweet.retweeted_by?(Current.user.id)
-          Tweet.get_retweet(Current.user.id).destroy
+          @tweet.get_retweet(Current.user.id).destroy
           redirect_to root_path, notice: "Retweet removed successfully!"
         else
           Tweet.create(user_id: Current.user.id, parent_tweet_id: @tweet.id, tweet_type: "retweet")
@@ -100,4 +84,3 @@ class TweetsController < ApplicationController
         @tweet = Tweet.find_by(id: params[:id])
       end
 end
-  

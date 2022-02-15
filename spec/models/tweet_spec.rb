@@ -31,9 +31,9 @@ RSpec.describe Tweet, type: :model do
             user1 = like.user
             user2 = create :user 
 
-            # tweet_likes = create :tweet_with_likes
+            tweet_likes = create :tweet_with_likes, likes_count: 2
 
-            # expect(tweet_likes.liked_by.length).to be true
+            expect(tweet_likes.liked_by.length).to eq(2)
             expect(tweet.liked_by?(user1.id)).to be true
             expect(tweet.liked_by?(user2.id)).to be false
         end
@@ -54,7 +54,7 @@ RSpec.describe Tweet, type: :model do
         end
     end
     
-    describe '.get_retweet' do
+    describe '#get_retweet' do
         it 'finds retweet by a given user' do
             tweet = create :parent_tweet
 
@@ -64,8 +64,8 @@ RSpec.describe Tweet, type: :model do
             sub_tweet2 = create :tweet, parent_tweet: tweet
             user2 = sub_tweet2.user
 
-            expect(Tweet.get_retweet(user1.id)).to eq(sub_tweet1)
-            expect(Tweet.get_retweet(user2.id)).not_to eq(sub_tweet2)
+            expect(tweet.get_retweet(user1.id)).to eq(sub_tweet1)
+            expect(tweet.get_retweet(user2.id)).not_to eq(sub_tweet2)
         end
     end
 end
