@@ -5,10 +5,11 @@ RSpec.describe Tweet, type: :model do
         it 'returns array of retweets on a tweet' do
             tweet = create :parent_tweet
 
-            sub_tweet1 = create(:tweet, parent_tweet: tweet, tweet_type: "retweet")
-            sub_tweet2 = create(:tweet, parent_tweet: tweet, tweet_type: "reply")
+            sub_tweet1 = create(:tweet, :retweet, parent_tweet: tweet)
+            sub_tweet2 = create(:tweet, :reply, parent_tweet: tweet)
 
             expect(tweet.retweets).not_to include(sub_tweet2)
+            expect(tweet.retweets).to include(sub_tweet1)
         end
     end
 
@@ -20,6 +21,7 @@ RSpec.describe Tweet, type: :model do
             sub_tweet2 = create(:tweet, :reply, parent_tweet: tweet)
 
             expect(tweet.replies).to include(sub_tweet2)
+            expect(tweet.replies).not_to include(sub_tweet1)
         end
     end
 

@@ -14,13 +14,11 @@ RSpec.describe TweetsController, type: :controller do
     it 'ensures all tweets are shown when user logged out' do
       Current.user = create :user
       session[:user_id] = nil
-      tweet1 = create :tweet_with_replies
-      tweets = Array.new.push(tweet1)
-      tweets.concat(tweet1.replies)
+      tweet1 = create :tweet
 
       get :index
 
-      expect(assigns(:tweets)).to match_array(tweets)
+      expect(assigns(:tweets)).to match_array(Tweet.all)
     end
 
     it 'ensures correct tweets are shown when user logged in' do
@@ -29,13 +27,10 @@ RSpec.describe TweetsController, type: :controller do
       followee1 = create :user
       create :relation, follower: Current.user, followee: followee1
       tweet1 = create :tweet, user: followee1
-      tweet2 = create :tweet, user: followee1
-      tweets = Array.new.push(tweet1)
-      tweets.push(tweet2)
 
       get :index
 
-      expect(assigns(:tweets)).to match_array(tweets)
+      expect(assigns(:tweets)).to match_array(Tweet.find(tweet1.id))
     end
   end
 
@@ -43,9 +38,7 @@ RSpec.describe TweetsController, type: :controller do
     it 'renders show page' do
       tweet = create :tweet_with_replies
 
-      params = {id: tweet.id}
-      get :show, params: params
-
+      get :show, params: {id: tweet.id}
       expect(response.status).to eq(200)
       expect(response).to render_template("show")
     end
@@ -53,8 +46,7 @@ RSpec.describe TweetsController, type: :controller do
     it 'ensures correct tweet and replies are shown' do
       tweet = create :tweet_with_replies
       
-      params = {id: tweet.id}
-      get :show, params: params
+      get :show, params: {id: tweet.id}
 
       expect(assigns(:tweet)).to eq(tweet)
       expect(assigns(:replies)).to match_array(tweet.replies)
@@ -66,8 +58,7 @@ RSpec.describe TweetsController, type: :controller do
       tweet = create :parent_tweet
       Current.user = tweet.user
 
-      params = {body: tweet.body}
-      post :create, params: params
+      post :create, params: {body: tweet.body}
 
       expect(response.status).to eq(302)
     end
@@ -76,8 +67,7 @@ RSpec.describe TweetsController, type: :controller do
       tweet = create :parent_tweet
       Current.user = tweet.user
       
-      params = {body: tweet.body}
-      post :create, params: params
+      post :create, params: {body: tweet.body}
 
       expect(assigns(:tweet).body).to eq(tweet.body)
       expect(response).to redirect_to(root_path)
@@ -88,8 +78,7 @@ RSpec.describe TweetsController, type: :controller do
     it 'checks response for destroy' do
       tweet = create :parent_tweet
 
-      params = {id: tweet.id}
-      delete :destroy, params: params
+      delete :destroy, params: {id: tweet.id}
 
       expect(response.status).to eq(302)
     end
@@ -97,10 +86,9 @@ RSpec.describe TweetsController, type: :controller do
     it 'destroys tweet' do
       tweet = create :parent_tweet
       
-      params = {id: tweet.id}
-      delete :destroy, params: params
+      delete :destroy, params: {id: tweet.id}
 
-      expect(assigns(:tweet).body).to eq(tweet.body)
+      expect{ Tweet.find(tweet.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect(response).to redirect_to(root_path)
     end
   end
@@ -110,8 +98,7 @@ RSpec.describe TweetsController, type: :controller do
       tweet = create :tweet_with_likes
       users = tweet.liked_by
 
-      params = {id: tweet.id}
-      get :likes, params: params
+      get :likes, params: {id: tweet.id}
 
       expect(response.status).to eq(200)
       expect(response).to render_template("likes")
@@ -121,8 +108,7 @@ RSpec.describe TweetsController, type: :controller do
       tweet = create :tweet_with_likes
       users = tweet.liked_by
 
-      params = {id: tweet.id}
-      get :likes, params: params
+      get :likes, params: {id: tweet.id}
 
       expect(assigns(:users)).to match_array(users)
     end
@@ -133,8 +119,7 @@ RSpec.describe TweetsController, type: :controller do
       tweet = create :parent_tweet
       like = create :like, tweet: tweet
 
-      params = {id: tweet.id}
-      post :add_like, params: params
+      post :add_like, params: {id: tweet.id}
 
       expect(response.status).to eq(302)
       expect(response).to redirect_to(root_path)
@@ -144,8 +129,7 @@ RSpec.describe TweetsController, type: :controller do
       tweet = create :parent_tweet
       Current.user = create :user
 
-      params = {id: tweet.id}
-      post :add_like, params: params
+      post :add_like, params: {id: tweet.id}
 
       expect(tweet.liked_by).to include(Current.user)
     end
@@ -155,10 +139,7 @@ RSpec.describe TweetsController, type: :controller do
       like = create :like, tweet: tweet
       Current.user = like.user
 
-      params = {id: tweet.id}
-      post :add_like, params: params
-
-      expect(tweet.likes).to eq([])
+      expect{ post :add_like, params: {id: tweet.id} }.to change { tweet.likes.count }.by(-1)
     end
   end
 
@@ -167,8 +148,7 @@ RSpec.describe TweetsController, type: :controller do
       tweet = create :tweet_with_retweets
       retweets = tweet.retweets
 
-      params = {id: tweet.id}
-      get :retweets, params: params
+      get :retweets, params: {id: tweet.id}
 
       expect(response.status).to eq(200)
       expect(response).to render_template("retweets")
@@ -178,8 +158,7 @@ RSpec.describe TweetsController, type: :controller do
       tweet = create :tweet_with_retweets
       retweets = tweet.retweets
 
-      params = {id: tweet.id}
-      get :retweets, params: params
+      get :retweets, params: {id: tweet.id}
 
       expect(assigns(:tweets)).to match_array(retweets)
     end
