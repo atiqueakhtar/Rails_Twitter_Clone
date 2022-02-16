@@ -4,7 +4,7 @@ class TweetsController < ApplicationController
 
     def index
       if session[:user_id]
-        @tweets = Current.user.followees_tweets
+        @tweets = Current.user.followees_and_user_tweets
       else
         @tweets = Tweet.all
       end
