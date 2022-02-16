@@ -29,11 +29,12 @@ Rails.application.routes.draw do
       post 'add_reply'
     end
   end
-
+  
   resources :users do
     member do
       get 'followers'
     end
   end
 
+  resources :notifications
 end

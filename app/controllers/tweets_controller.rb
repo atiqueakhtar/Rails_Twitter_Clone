@@ -45,7 +45,8 @@ class TweetsController < ApplicationController
                 format.turbo_stream
                 format.html { redirect_to root_path, notice: "Tweet unliked successfully!" }
             else
-                @tweet.liked_by << Current.user
+                like = Like.create(tweet_id: @tweet.id, user_id: Current.user.id)
+                Notification.create(notifiable: @like, tweet_user_id: @tweet.user_id) if @tweet.user_id != Current.user.id
                 format.turbo_stream
                 format.html { redirect_to root_path, notice: "Tweet liked successfully!" }
             end
@@ -61,13 +62,15 @@ class TweetsController < ApplicationController
           @tweet.get_retweet(Current.user.id).destroy
           redirect_to root_path, notice: "Retweet removed successfully!"
         else
-          Tweet.create(user_id: Current.user.id, parent_tweet_id: @tweet.id, tweet_type: "retweet")
+          @retweet = Tweet.create(user_id: Current.user.id, parent_tweet_id: @tweet.id, tweet_type: "retweet")
+          Notification.create(notifiable: @retweet, tweet_user_id: @tweet.user_id) if @tweet.user_id != Current.user.id
           redirect_to root_path, notice: "Retweeted successfully!"
         end
     end
     
     def add_reply
         @reply = Tweet.new(body: tweet_params[:body], user_id: Current.user.id, parent_tweet_id: @tweet.id, tweet_type: "reply")
+        Notification.create(notifiable: @reply, tweet_user_id: @tweet.user_id) if @tweet.user_id != Current.user.id
         if @reply.save
           redirect_to tweet_path(@tweet.id), notice: "Reply added successfully!"
         else

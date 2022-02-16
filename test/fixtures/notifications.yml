@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  notifiable: 
+  flag: MyString
+
+two:
+  user: two
+  notifiable: 
+  flag: MyString

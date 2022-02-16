@@ -11,38 +11,36 @@
     </h5>
     <div class="card-body">
         <p class="card-text"><%= link_to tweet.body, tweet_path(tweet.id), data: { turbo: "false" } %></p>
-        <div class="row align-items-end">
-            <div class="col">
-                <% if session[:user_id] %>
+        <% if session[:user_id] %>
+            <div class="row align-items-end">
+                <div class="col">
                     <% if tweet.liked_by?(Current.user.id) %>
                         <%= button_to "Unlike", add_like_tweet_path(tweet.id), class: "btn btn-secondary", form_class: "d-inline" %>
                     <% else %>
                         <%= button_to "Like", add_like_tweet_path(tweet.id), class: "btn btn-primary", form_class: "d-inline" %>
                     <% end %>
-                <% end %>
-                <%= turbo_frame_tag "tweet_#{tweet.id}_like_count" do %>
-                    <%= tweet.likes.count %>
-                <% end %>
-            </div>
-            <div class="col">
-                <%= button_to "Reply", tweet_path(tweet.id), method: :get, class: "btn btn-outline-secondary", data: { turbo: "false" }, form_class: "d-inline" %>
-                <%= tweet.replies.count %>
-            </div>
-            <div class="col">
-                <% if session[:user_id] %>
+                    <%= turbo_frame_tag "tweet_#{tweet.id}_like_count" do %>
+                        <%= tweet.likes.count %>
+                    <% end %>
+                </div>
+                <div class="col">
+                    <%= button_to "Reply", tweet_path(tweet.id), method: :get, class: "btn btn-outline-secondary", data: { turbo: "false" }, form_class: "d-inline" %>
+                    <%= tweet.replies.count %>
+                </div>
+                <div class="col">
                     <% if tweet.retweeted_by?(Current.user.id) %>
                         <%= button_to "Retweet", update_retweet_tweet_path(tweet.id), class: "btn btn-secondary", data: { turbo: "false" }, form_class: "d-inline" %>
                     <% else %>
                         <%= button_to "Retweet", update_retweet_tweet_path(tweet.id), class: "btn btn-primary", data: { turbo: "false" }, form_class: "d-inline" %>
                     <% end %>
-                <% end %>
-                <%= tweet.retweets.count %>
-            </div>
-            <% if session[:user_id] && tweet.user_id == Current.user.id %>
-                <div class="col">
-                    <%= button_to "Delete", tweet_path(tweet), method: :delete, class: "delete-item btn btn-outline-secondary", remote: true %>
+                    <%= tweet.retweets.count %>
                 </div>
-            <% end %>
-        </div>
+                <% if tweet.user_id == Current.user.id %>
+                    <div class="col">
+                        <%= button_to "Delete", tweet_path(tweet), method: :delete, class: "delete-item btn btn-outline-secondary", remote: true %>
+                    </div>
+                <% end %>
+            </div>
+        <% end %>
     </div>
 </div>
