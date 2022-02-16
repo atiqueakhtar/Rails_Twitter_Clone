@@ -31,4 +31,8 @@ class User < ApplicationRecord
     def followee?(user_id)
         self.followees.pluck(:id).include?(user_id)
     end
+
+    def followees_tweets
+        Tweet.all.select { |tweet| self.followee?(tweet.user_id) || (tweet.user_id == self.id) }
+    end
 end
