@@ -28,4 +28,12 @@ class Tweet < ApplicationRecord
         self.child_tweets.where(tweet_type: "reply")
     end
 
+    def create_notification(tweet)
+        create(tweet)
+    end
+
+    private
+    def create(tweet)
+        Notification.create(notifiable: self, tweet_user_id: tweet.user_id)
+    end
 end

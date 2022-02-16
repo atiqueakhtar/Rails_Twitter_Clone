@@ -36,4 +36,8 @@ class User < ApplicationRecord
         followees_and_user_array = self.followees.pluck(:id).push(self.id)
         Tweet.where(user_id: followees_and_user_array)
     end
+
+    def notifications
+        Notification.where(tweet_user_id: self.id)
+    end
 end

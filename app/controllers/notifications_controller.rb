@@ -1,5 +1,5 @@
 class NotificationsController < ApplicationController
     def index
-        @notifications = Notification.where(tweet_user_id: Current.user.id)
+        @notifications = Current.user.notifications
     end
 end
