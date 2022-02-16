@@ -41,7 +41,7 @@ class TweetsController < ApplicationController
     def add_like
         respond_to do |format|
             if @tweet.liked_by?(Current.user.id)
-                @tweet.liked_by.delete(Current.user)
+                @tweet.liked_by.destroy(Current.user)
                 format.turbo_stream
                 format.html { redirect_to root_path, notice: "Tweet unliked successfully!" }
             else

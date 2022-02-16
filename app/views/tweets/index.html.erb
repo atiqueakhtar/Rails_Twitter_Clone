@@ -16,6 +16,7 @@
 
         <%= turbo_frame_tag "tweets_list" do %>
             <% @tweets.reverse.each do |tweet| %>
+                    <%# debugger %>
                     <%= render partial: "tweet", locals: { tweet: tweet } %>
                     <br>
             <% end %>

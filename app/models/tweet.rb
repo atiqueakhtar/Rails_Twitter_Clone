@@ -8,6 +8,8 @@ class Tweet < ApplicationRecord
     has_many :retweeted_by, through: :child_tweets, class_name: "User", source: :user
     belongs_to :parent_tweet, class_name: "Tweet", foreign_key: "parent_tweet_id", optional: true
 
+    default_scope { order(:created_at) }
+
     def liked_by?(user_id)
         self.liked_by.pluck(:id).include?(user_id)
     end
