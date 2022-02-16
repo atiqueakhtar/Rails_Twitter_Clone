@@ -33,6 +33,7 @@ class User < ApplicationRecord
     end
 
     def followees_tweets
-        Tweet.all.select { |tweet| self.followee?(tweet.user_id) || (tweet.user_id == self.id) }
+        followees_id_array = self.followees.pluck(:id).push(self.id)
+        Tweet.where(user_id: followees_id_array)
     end
 end
