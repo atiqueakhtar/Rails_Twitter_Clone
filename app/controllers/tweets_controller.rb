@@ -41,11 +41,11 @@ class TweetsController < ApplicationController
     def add_like
         respond_to do |format|
             if @tweet.liked_by?(Current.user.id)
-                @tweet.liked_by.delete(Current.user)
+                @tweet.liked_by.destroy(Current.user)
                 format.turbo_stream
                 format.html { redirect_to root_path, notice: "Tweet unliked successfully!" }
             else
-                @tweet.liked_by << Current.user
+                @like = Like.create(tweet_id: @tweet.id, user_id: Current.user.id)
                 format.turbo_stream
                 format.html { redirect_to root_path, notice: "Tweet liked successfully!" }
             end
@@ -61,7 +61,7 @@ class TweetsController < ApplicationController
           @tweet.get_retweet(Current.user.id).destroy
           redirect_to root_path, notice: "Retweet removed successfully!"
         else
-          Tweet.create(user_id: Current.user.id, parent_tweet_id: @tweet.id, tweet_type: "retweet")
+          @retweet = Tweet.create(user_id: Current.user.id, parent_tweet_id: @tweet.id, tweet_type: "retweet")
           redirect_to root_path, notice: "Retweeted successfully!"
         end
     end
