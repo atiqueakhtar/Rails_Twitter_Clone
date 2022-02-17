@@ -46,7 +46,6 @@ class TweetsController < ApplicationController
                 format.html { redirect_to root_path, notice: "Tweet unliked successfully!" }
             else
                 @like = Like.create(tweet_id: @tweet.id, user_id: Current.user.id)
-                
                 format.turbo_stream
                 format.html { redirect_to root_path, notice: "Tweet liked successfully!" }
             end
