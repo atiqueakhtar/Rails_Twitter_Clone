@@ -46,7 +46,7 @@ class TweetsController < ApplicationController
                 format.html { redirect_to root_path, notice: "Tweet unliked successfully!" }
             else
                 @like = Like.create(tweet_id: @tweet.id, user_id: Current.user.id)
-                CreateNotificationJob.perform_later(@like)
+                
                 format.turbo_stream
                 format.html { redirect_to root_path, notice: "Tweet liked successfully!" }
             end
@@ -63,7 +63,6 @@ class TweetsController < ApplicationController
           redirect_to root_path, notice: "Retweet removed successfully!"
         else
           @retweet = Tweet.create(user_id: Current.user.id, parent_tweet_id: @tweet.id, tweet_type: "retweet")
-          CreateNotificationJob.perform_later(@retweet)
           redirect_to root_path, notice: "Retweeted successfully!"
         end
     end
@@ -71,7 +70,6 @@ class TweetsController < ApplicationController
     def add_reply
         @reply = Tweet.new(body: tweet_params[:body], user_id: Current.user.id, parent_tweet_id: @tweet.id, tweet_type: "reply")
         if @reply.save
-          CreateNotificationJob.perform_later(@reply)
           redirect_to tweet_path(@tweet.id), notice: "Reply added successfully!"
         else
           render :new, status: :unprocessable_entity

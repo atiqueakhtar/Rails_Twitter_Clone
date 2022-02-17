@@ -1,4 +1,6 @@
 class Tweet < ApplicationRecord
+    after_create :create_notification
+
     belongs_to :user, optional: true
     has_many :likes, dependent: :destroy
     has_many :liked_by, through: :likes, class_name: "User", source: "user"
@@ -30,4 +32,10 @@ class Tweet < ApplicationRecord
         self.child_tweets.where(tweet_type: "reply")
     end
 
+    private
+    def create_notification
+        if self.tweet_type != "tweet"
+            CreateNotificationJob.perform_later(self)
+        end
+    end
 end
