@@ -1,11 +1,7 @@
 <ul>
     <% @notifications.each do |notification| %>
         <li>
-            <% if notification.notifiable_type == "Like" %>
-                <%= link_to "You have a #{notification.notifiable_type} by #{notification.notifiable.user.username} on your tweet ", tweet_path(notification.notifiable.tweet_id) %><br>   
-            <% else %>
-                <%= link_to "You have a #{notification.notifiable.tweet_type} by #{notification.notifiable.user.username} on your tweet ", tweet_path(notification.notifiable.parent_tweet_id) %><br>
-            <% end %>
+            <%= display_notification(notification) %>
         </li>
     <% end %>
 </ul>

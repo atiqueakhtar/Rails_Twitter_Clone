@@ -1,14 +1,12 @@
 class Like < ApplicationRecord
+    after_create :create_notification
+
     belongs_to :tweet
     belongs_to :user
     has_many :notifications, as: :notifiable, dependent: :destroy
 
-    def create_notification(tweet)
-        create(tweet)
-    end
-
     private
-    def create(tweet)
-        Notification.create(notifiable: self, tweet_user_id: tweet.user_id)
+    def create_notification
+        Notification.create(notifiable: self, tweet_user_id: self.tweet_id) if self.user_id != Current.user.id
     end
 end
