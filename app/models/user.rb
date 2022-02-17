@@ -38,6 +38,6 @@ class User < ApplicationRecord
     end
 
     def notifications
-        Notification.where(tweet_user_id: self.id)
+        Notification.where(notifier_id: self.id)
     end
 end

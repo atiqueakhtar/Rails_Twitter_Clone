@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_16_103816) do
+ActiveRecord::Schema.define(version: 2022_02_17_043316) do
 
   create_table "likes", force: :cascade do |t|
     t.integer "tweet_id", null: false
@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 2022_02_16_103816) do
     t.string "flag", default: "unread"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "tweet_user_id"
+    t.integer "notifier_id"
     t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable"
   end
 
