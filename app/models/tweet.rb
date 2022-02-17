@@ -34,8 +34,8 @@ class Tweet < ApplicationRecord
 
     private
     def create_notification
-        if self.tweets_type != "tweet"
-            Notification.create(notifiable: self, notifier_id: self.parent_tweet.user_id) if self.parent_tweet.user_id != Current.user.id
+        if self.tweet_type != "tweet"
+            Notification.create(notifiable: self, notifier_id: self.parent_tweet.user_id) if self.parent_tweet.user_id != self.user.id
         end
     end
 end
