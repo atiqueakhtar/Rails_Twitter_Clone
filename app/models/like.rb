@@ -1,5 +1,5 @@
 class Like < ApplicationRecord
-    after_create :create_notification
+    after_commit :create_notification, on: :create
 
     belongs_to :tweet
     belongs_to :user
@@ -7,6 +7,6 @@ class Like < ApplicationRecord
 
     private
     def create_notification
-        CreateNotificationJob.perform_later(self)
+        CreateNotificationJob.perform_later(self.id, self.class.to_s)
     end
 end

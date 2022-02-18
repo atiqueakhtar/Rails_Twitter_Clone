@@ -1,5 +1,5 @@
 class Tweet < ApplicationRecord
-    after_create :create_notification
+    after_commit :create_notification, on: :create
 
     belongs_to :user, optional: true
     has_many :likes, dependent: :destroy
@@ -35,7 +35,7 @@ class Tweet < ApplicationRecord
     private
     def create_notification
         if self.tweet_type == "retweet" || self.tweet_type == "reply" 
-            CreateNotificationJob.perform_later(self)
+            CreateNotificationJob.perform_later(self.id, self.class.to_s)
         end
     end
 end
