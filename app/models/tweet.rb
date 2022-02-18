@@ -34,7 +34,7 @@ class Tweet < ApplicationRecord
 
     private
     def create_notification
-        if self.tweet_type == "retweet" || self.tweet_type == "reply"
+        if ["retweet", "reply"].include? self.tweet_type
             CreateNotificationJob.perform_later(self.id, self.class.to_s) if self.user != self.parent_tweet.user
         end
     end
