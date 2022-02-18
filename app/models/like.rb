@@ -7,6 +7,6 @@ class Like < ApplicationRecord
 
     private
     def create_notification
-        CreateNotificationJob.perform_later(self.id, self.class.to_s)
+        CreateNotificationJob.perform_later(self.id, self.class.to_s) if self.user != self.tweet.user
     end
 end
