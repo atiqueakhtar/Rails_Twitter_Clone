@@ -3,11 +3,14 @@
     <% tweet = tweet.parent_tweet %>
 <% end %>
 <div class="card">
-    <h5 class="card-header">
-        <%= tweet.user.username %>
-        <% if tweet.tweet_type == "reply" %>
-            <b>Replying to <%= link_to "tweet", tweet_path(tweet.parent_tweet_id), data: { turbo: "false" } %></b>
-        <% end %>
+    <h5 class="d-flex justify-content-between card-header">
+        <span>
+            <%= tweet.user.username %>
+            <% if tweet.tweet_type == "reply" %>
+                <b>Replying to <%= link_to "tweet", tweet_path(tweet.parent_tweet_id), data: { turbo: "false" } %></b>
+            <% end %>
+        </span>
+        <%= tweet_creation_time(tweet) %>
     </h5>
     <div class="card-body">
         <p class="card-text"><%= link_to tweet.body, tweet_path(tweet.id), data: { turbo: "false" } %></p>

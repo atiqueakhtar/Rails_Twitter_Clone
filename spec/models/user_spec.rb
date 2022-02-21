@@ -41,4 +41,18 @@ RSpec.describe User, type: :model do
       expect(followee.followee?(follower.id)).to be false
     end
   end
+
+  describe '#notification' do
+    it 'returns all notifications of current user' do
+      tweet = create :tweet
+      Current.user = create :user
+      like = create :like, tweet: tweet, user: Current.user
+      reply = create :tweet, :reply, parent_tweet: tweet, user: Current.user
+
+      notify1 = create :notification, notifiable: reply, notifier_id: tweet.user.id
+      notify2 = create :notification, notifiable: like, notifier_id: tweet.user.id
+      
+      expect(tweet.user.notifications).to match_array([notify1, notify2])
+    end
+  end
 end
