@@ -47,12 +47,9 @@ RSpec.describe User, type: :model do
       tweet = create :tweet
       Current.user = create :user
       like = create :like, tweet: tweet, user: Current.user
-      reply = create :tweet, :reply, parent_tweet: tweet, user: Current.user
-
-      notify1 = create :notification, notifiable: reply, notifier_id: tweet.user.id
-      notify2 = create :notification, notifiable: like, notifier_id: tweet.user.id
+      reply = create :tweet, :reply, parent_tweet: tweet
       
-      expect(tweet.user.notifications).to match_array([notify1, notify2])
+      expect(tweet.user.notifications).to match_array([like.notification, reply.notification])
     end
   end
 end

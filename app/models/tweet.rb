@@ -4,7 +4,7 @@ class Tweet < ApplicationRecord
     belongs_to :user, optional: true
     has_many :likes, dependent: :destroy
     has_many :liked_by, through: :likes, class_name: "User", source: "user"
-    has_many :notifications, as: :notifiable, dependent: :destroy
+    has_one :notification, as: :notifiable, dependent: :destroy
 
     has_many :child_tweets, class_name: "Tweet", foreign_key: "parent_tweet_id", dependent: :destroy
     has_many :retweeted_by, through: :child_tweets, class_name: "User", source: :user
