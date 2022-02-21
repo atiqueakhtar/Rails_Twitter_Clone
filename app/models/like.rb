@@ -3,7 +3,7 @@ class Like < ApplicationRecord
 
     belongs_to :tweet
     belongs_to :user
-    has_many :notifications, as: :notifiable, dependent: :destroy
+    has_one :notification, as: :notifiable, dependent: :destroy
 
     private
     def create_notification
